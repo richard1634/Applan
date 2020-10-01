@@ -1,0 +1,23 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;500&display=swap');
+
+/* log in styling */
+#id_password,#id_username,#id_password1,#id_password2,#id_email{
+	width : 50%;
+}
+
+
+.alert{
+	width:50%;
+}
+
+
+.footer{
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: red;
+  color: white;
+  text-align: center;
+}
+
