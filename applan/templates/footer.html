@@ -7,5 +7,17 @@
 
 
 <div class="footer">
-  <p>Footer</p>
+    <a href = "{% url 'home' %}" class="footer_logo_a">
+        <img src = "{% static 'svg/notebook.svg' %}" class="footer_logo" width="30">
+    </a>
+
+    <ul class = "footer__links">
+          <li><a href="{% url 'home' %}">Terms of Use</a></li>
+          <li><a href="{% url 'about' %}">About Me</a></li>
+          <li><a href="{% url 'contact' %}">Contact</a></li>
+    </ul>
+
+    <div class = "footer_country">
+      United States 
+    </div>
 </div>

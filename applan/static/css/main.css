@@ -12,12 +12,52 @@
 
 
 .footer{
+  padding-top:15px;
+  padding-bottom: 15px;
   position: fixed;
   left: 0;
   bottom: 0;
   width: 100%;
-  background-color: red;
+  background-color:#303030 ;
   color: white;
-  text-align: center;
+  display:flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 7vh;
 }
 
+.footer_logo_a{
+	padding-left:3%;
+}
+
+.footer_country{
+	padding-right: 2%;
+	font-size:15px;
+	text-align: center;	
+}
+.footer_logo{
+ 	filter: brightness(0) invert(1);
+}
+.footer__links{
+	padding-left:3%;
+}
+.footer__links li{
+	display: inline-block;
+	padding: 0px 50px;
+	font-size:10px;
+	position:relative;
+	bottom:-7px;
+}
+
+
+.footer__links li a{
+	color:white;
+	text-decoration: none;
+	font-size:10px;
+}
+
+
+.footer__links li a:hover{
+	color: 	#989898;
+	text-decoration: 
+}

@@ -20,7 +20,7 @@ from django.urls import path
 from pages.views import home_view, contact_view, about_view
 from django.contrib.auth import views as auth_views
 from users.views import register_view, profile_view
-from task.views import task_detail_view
+from task.views import task_detail_view,task_create_view
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home_view, name = 'home'),
@@ -34,5 +34,7 @@ urlpatterns = [
     path('profile/', profile_view,name = 'profile'),
  
     path('task/', task_detail_view,name = 'task'),
+    path('create/', task_create_view,name = 'create'),
+
 
 ]

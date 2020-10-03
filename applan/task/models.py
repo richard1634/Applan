@@ -7,5 +7,4 @@ from django.db import models
 class Task(models.Model):
 	title 		= models.TextField()
 	description = models.TextField()
-	price		= models.TextField()
-	summary	 	= models.TextField(default='this is cool!')
+	length		= models.TextField()
