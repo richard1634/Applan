@@ -74,3 +74,24 @@ class TimeCrudUser(View):
         obj = Task2.objects.get(id=id1)
         data = {'id':obj.id,'timer':obj.timer}
         return JsonResponse(data)
+
+
+class PauseCrudUser(View):
+    def get(self,request):
+        time_left1 = request.GET.get('time_left', None)
+        id1 = request.GET.get('id',None)
+
+        idx = time_left1.index(":")
+
+        timer1 = time_left1[:idx]
+        seconds1 = time_left1[idx+1:]
+
+        obj = Task2.objects.get(id=id1)
+        obj.timer = timer1
+        my_id = obj.id
+        obj.save()
+        data = {
+            'paused': True,
+            'id' : my_id
+        }
+        return JsonResponse(data)

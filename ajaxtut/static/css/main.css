@@ -25,7 +25,9 @@
 .alert{
 	width:50%;
 }
-
+h2{
+	font-family: "Montserrat", sans-serif;
+}
 label{
 	font-family: "Montserrat", sans-serif;
 }
@@ -38,10 +40,7 @@ body{
 .footer{
   padding-top:15px;
   padding-bottom: 15px;
-/*  position: fixed;
 
-  left: 0;
-  */
   width: 100%;
   position:absolute;
   bottom: 0;
@@ -100,3 +99,4 @@ body{
 	padding-bottom: 5%;
 
 }
+

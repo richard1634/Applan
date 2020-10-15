@@ -6,10 +6,10 @@
 {% block content %}
 
 <div class="container">
-    <h1 class = "taskmanager" align="center">Task Manager</h1>
+    <h2 class = "taskmanager" align="center">{{user.username}}'s Tasks</h2>
     <div class="row">
       <div class="col-md-4 ">
-        <h3>Add Task</h3>
+
 
         <form id="addUser" action="">
                   <div class="form-group">
@@ -19,7 +19,7 @@
                     <input class="form-control" type="text" name="address" placeholder="Description" required>
                   </div>
                   <div class="form-group">
-                    <input class="form-control" type="number" name="age" min="10" max="100" placeholder="Length" required>
+                    <input class="form-control" type="number" name="age" min="10" max="100" placeholder="Duration (minutes)" required>
                   </div>
                   <button class="btn btn-outline-success form-control" type="submit">SUBMIT</button>
         </form>
@@ -29,13 +29,13 @@
 
 
       <div class="col-md-8">
-        <h3>Tasks</h3>
 
-        <table id="userTable" class="table table-striped">
+        <table id="userTable" class="table table-bordered">
           <tr>
             <th>Title</th>
             <th>Description</th>
-            <th colspan="4">Length</th>
+            <th>Duration</th>
+            <th colspan="4"></th>
           </tr>
           {% if users %}
           {% for user in users %}
@@ -48,19 +48,27 @@
               
               <!-- timer-->
               <td align="center">
-                  <button class="btn btn-success form-control" onClick="timeTask({{user.id}})"> 
+                  <button class="btn btn-outline-secondary form-control" onClick="timeTask({{user.id}})"> 
                     <span id="timer-{{user.id}}">
                        timer
                     </span>
                   </button>
               </td>
+              <!-- PAUSE -->
+              <td align="center">
+                  <button class="btn btn-outline-secondary form-control" onClick="pauseTask({{user.id}})"> 
+                    <span id="pause-{{user.id}}">
+                       pause
+                    </span>
+                  </button>
+              </td>
 
               <td align="center">
-                  <button class="btn btn-success form-control" onClick="editUser({{user.id}})" data-toggle="modal" data-target="#myModal">EDIT</button>
+                  <button class="btn btn-outline-success form-control" onClick="editUser({{user.id}})" data-toggle="modal" data-target="#myModal">edit</button>
               </td>
              
               <td align="center">
-                  <button class="btn btn-danger form-control" onClick="deleteUser({{user.id}})">DELETE</button>
+                  <button class="btn btn-danger form-control" onClick="deleteUser({{user.id}})">delete</button>
               </td>
           </tr>
           {% endfor %}
@@ -86,11 +94,11 @@
         <form id="updateUser" action="">
         <div class="modal-body">
             <input class="form-control" id="form-id" type="hidden" name="formId"/>
-            <label for="name">Name</label>
+            <label for="name">Title</label>
             <input class="form-control" id="form-name" type="text" name="formName"/>
-            <label for="address">Address</label>
+            <label for="address">Description</label>
             <input class="form-control" id="form-address" type="text" name="formAddress"/>
-            <label for="age">Age</label>
+            <label for="age">Duration</label>
             <input class="form-control" id="form-age" type="number" name="formAge" min=10 max=100/>
         </div>
         <div class="modal-footer">
@@ -145,15 +153,23 @@ function appendToUsrTable(task2) {
               
               <!-- timer-->
               <td align="center">
-                  <button class="btn btn-success form-control" onClick="timeTask(${task2.id})"> 
+                  <button class="btn btn-outline-secondary form-control" onClick="timeTask(${task2.id})"> 
                     <span id="timer-${task2.id}">
                        timer
                     </span>
                   </button>
               </td>
+              <!-- PAUSE -->
+              <td align="center">
+                  <button class="btn btn-outline-secondary form-control" onClick="pauseTask(${task2.id})"> 
+                    <span id="pause-${task2.id}">
+                       Pause
+                    </span>
+                  </button>
+              </td>
 
               <td align="center">
-                  <button class="btn btn-success form-control" onClick="editUser(${task2.id})" data-toggle="modal" data-target="#myModal">EDIT</button>
+                  <button class="btn btn-outline-success form-control" onClick="editUser(${task2.id})" data-toggle="modal" data-target="#myModal">EDIT</button>
               </td>
              
               <td align="center">
@@ -251,9 +267,12 @@ function deleteUser(id) {
   }
 }
 
-function startTimer(duration, display) {
-    var timer = duration, minutes, seconds;
-    setInterval(function () {
+var myTimedict= {};
+var started = 0;
+function startTimer(duration, display,id) {
+    var timer = duration;
+
+    myTimedict[id] = setInterval(function () {
         minutes = parseInt(timer / 60, 10);
         seconds = parseInt(timer % 60, 10);
 
@@ -262,11 +281,18 @@ function startTimer(duration, display) {
 
         display.html(minutes + ":" + seconds);
 
+        started = 1;
         if (--timer < 0) {
             timer = duration;
         }
     }, 1000);
 }
+
+function pauseTimer(id){
+  console.log(id)
+  clearInterval(myTimedict[id])
+}
+
 function timeTask(id){
   // ajax call to get the seconds to time, and call start timer after a success
   var action = confirm("Timing Task: Focus on it.");
@@ -279,19 +305,35 @@ function timeTask(id){
         dataType: 'json',
         success: function (data) {
             if (data.id) {
-              var fiveMinutes = 60 * data.timer;
-              startTimer(fiveMinutes, $('#timer-' + data.id));
+                time_inmins = 60 * data.timer; //only first
+                startTimer(time_inmins, $('#timer-' + data.id),id);
             }
         }
     });
   }
 }
 
-// jQuery(function ($) {
-//     var fiveMinutes = 60 * 5,
-//         display = $('.time');
-//     startTimer(fiveMinutes, display);
-// });
+
+function pauseTask(id){
+  // ajax call to get the seconds to time, and call start timer after a success
+  var time_left = $('#timer-'+id).text();
+  console.log(time_left)
+ // console.log(time_left)
+    $.ajax({
+        url: '{% url "crud_ajax_pause" %}',
+        data: {
+            'id': id,
+            'time_left': time_left,
+        },
+        dataType: 'json',
+        success: function (data) {
+            if (data.paused) {
+              console.log(data.id)
+              pauseTimer(data.id)
+            }
+        }
+    });
+  }
 
 
 </script>
