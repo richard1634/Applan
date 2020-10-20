@@ -7,6 +7,7 @@
 
 <div class="container">
     <h2 class = "taskmanager" align="center">{{user.username}}'s Tasks</h2>
+
     <div class="row">
       <div class="col-md-4 ">
 
@@ -19,10 +20,13 @@
                     <input class="form-control" type="text" name="address" placeholder="Description" required>
                   </div>
                   <div class="form-group">
-                    <input class="form-control" type="number" name="age" min="10" max="100" placeholder="Duration (minutes)" required>
+                    <input class="form-control" type="number" name="age" min="1" max="100" placeholder="Duration (minutes)" required>
                   </div>
                   <button class="btn btn-outline-success form-control" type="submit">SUBMIT</button>
         </form>
+        <div id="resetTimer">
+            <button class="btn btn-outline-secondary form-control" onClick="resetAllTimers()">Reset Timers</button>
+        </div>
       </div>
 
 
@@ -35,7 +39,19 @@
             <th>Title</th>
             <th>Description</th>
             <th>Duration</th>
-            <th colspan="4"></th>
+            <th colspan="4">
+               <span id = "finishdiv">
+                  <button id="finish" class="btn btn-success form-control" onClick="calc_efficiency()"> 
+                         Finished
+                  </button>
+              </span>
+
+              <span id = "finishdiv2" align="center">
+                      0%
+              </span>
+            </th>
+
+
           </tr>
           {% if users %}
           {% for user in users %}
@@ -44,7 +60,7 @@
               
               <td class="userAddress userData" name="address">{{user.description}}</td>
               
-              <td class="userAge userData" name="age">{{user.length}}</td>
+              <td class="userAge userData" name="age">{{user.length|floatformat:"0"}}</td>
               
               <!-- timer-->
               <td align="center">
@@ -73,7 +89,6 @@
           </tr>
           {% endfor %}
           {% else %}
-            No Users
           {% endif %}
         </table>
       </div>
@@ -99,7 +114,7 @@
             <label for="address">Description</label>
             <input class="form-control" id="form-address" type="text" name="formAddress"/>
             <label for="age">Duration</label>
-            <input class="form-control" id="form-age" type="number" name="formAge" min=10 max=100/>
+            <input class="form-control" id="form-age" type="number" name="formAge" min=1 max=100/>
         </div>
         <div class="modal-footer">
             <button type="submit" class="btn btn-primary" >Save changes</button>
@@ -149,7 +164,7 @@ function appendToUsrTable(task2) {
               
               <td class="userAddress userData" name="address">${task2.description}</td>
               
-              <td class="userAge userData" name="age">${task2.length}</td>
+              <td class="userAge userData" name="age">${task2.length{{user.length|floatformat:"0"}}}</td>
               
               <!-- timer-->
               <td align="center">
@@ -169,11 +184,11 @@ function appendToUsrTable(task2) {
               </td>
 
               <td align="center">
-                  <button class="btn btn-outline-success form-control" onClick="editUser(${task2.id})" data-toggle="modal" data-target="#myModal">EDIT</button>
+                  <button class="btn btn-outline-success form-control" onClick="editUser(${task2.id})" data-toggle="modal" data-target="#myModal">edit</button>
               </td>
              
               <td align="center">
-                  <button class="btn btn-danger form-control" onClick="deleteUser(${task2.id})">DELETE</button>
+                  <button class="btn btn-danger form-control" onClick="deleteUser(${task2.id})">delete</button>
               </td>
           </tr>
 
@@ -283,7 +298,7 @@ function startTimer(duration, display,id) {
 
         started = 1;
         if (--timer < 0) {
-            timer = duration;
+            zeroTimer(id);
         }
     }, 1000);
 }
@@ -291,28 +306,46 @@ function startTimer(duration, display,id) {
 function pauseTimer(id){
   console.log(id)
   clearInterval(myTimedict[id])
+  myTimedict[id] = null;
 }
 
 function timeTask(id){
   // ajax call to get the seconds to time, and call start timer after a success
-  var action = confirm("Timing Task: Focus on it.");
-  if (action != false) {
-    $.ajax({
-        url: '{% url "crud_ajax_time" %}',
-        data: {
-            'id': id,
-        },
-        dataType: 'json',
-        success: function (data) {
-            if (data.id) {
-                time_inmins = 60 * data.timer; //only first
-                startTimer(time_inmins, $('#timer-' + data.id),id);
-            }
-        }
-    });
+    if (myTimedict[id])
+  {
+    confirm("Already a timer running!")
   }
+  else{
+      var action = confirm("Timing Task: Focus on it.");
+      if (action != false) {
+        $.ajax({
+            url: '{% url "crud_ajax_time" %}',
+            data: {
+                'id': id,
+            },
+            dataType: 'json',
+            success: function (data) {
+                if (data.id) {
+                    time_inmins = data.timer; //only first
+                    startTimer(time_inmins, $('#timer-' + data.id),id);
+                }
+            }
+        });
+      }
+    }
 }
 
+function calc_efficiency(){
+  $.ajax({
+    url: '{% url "crud_ajax_calc" %}',
+    dataType:'json',
+    success:function(data){
+      if (data.efficiency){
+        $('#finishdiv2').html(data.efficiency +"%");
+      }
+    }
+  })
+}
 
 function pauseTask(id){
   // ajax call to get the seconds to time, and call start timer after a success
@@ -335,7 +368,50 @@ function pauseTask(id){
     });
   }
 
+function zeroTimer(id){
+  // ajax call to get the seconds to time, and call start timer after a success
+  var time_left = "0:00"
+ // console.log(time_left)
+    $.ajax({
+        url: '{% url "crud_ajax_pause" %}',
+        data: {
+            'id': id,
+            'time_left': time_left,
+        },
+        dataType: 'json',
+        success: function (data) {
+            if (data.paused) {
+              pauseTimer(data.id)
+            }
+        }
+    });
+  }
+']'
+function resetAllTimers()
+{
+    //gonna need to set all numbers to "timer"
+    $.ajax({
+    url: '{% url "crud_ajax_reset" %}',
+    dataType:'json',
+    success: function (data) {
+    if (data.reset) {
+       console.log(data.reset)
+       setTimerString(data.id_arr)
+      }
+    }
+  });
+}
+
+
+function setTimerString(id_arr)
+{
+   for (var i = 0; i<id_arr.length;i++)
+    {
+      $('#timer-' + id_arr[i]).html("timer")
+       myTimedict[id_arr[i]] = null
+    }
+}
 
 </script>
-
+<!-- fix the set interval -->
 {% endblock javascript %}

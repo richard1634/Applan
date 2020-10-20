@@ -33,6 +33,8 @@ urlpatterns = [
     path('ajax/crud/delete/',  views.DeleteCrudUser.as_view(), name='crud_ajax_delete'),
     path('ajax/crud/timer/',    views.TimeCrudUser.as_view(),  name='crud_ajax_time'),
     path('ajax/crud/pause/',    views.PauseCrudUser.as_view(),  name='crud_ajax_pause'),
+    path('ajax/crud/calc/',    views.CalcCrudUser.as_view(),  name='crud_ajax_calc'),
+    path('ajax/crud/reset_timers/',    views.ResetAllTimersCrudUser.as_view(),  name='crud_ajax_reset'),
 
     path('', home_view, name = 'home'),
     path('contact/',contact_view, name = 'contact'),

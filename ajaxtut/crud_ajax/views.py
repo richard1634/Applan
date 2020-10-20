@@ -12,6 +12,10 @@ class CrudView(ListView):
     template_name = 'crud_ajax/crud.html'
     context_object_name = 'users'
 
+    def get_queryset(self):
+        return self.model.objects.filter(user=self.request.user)
+
+
 
 class CreateCrudUser(View):
     def get(self, request):
@@ -19,12 +23,13 @@ class CreateCrudUser(View):
         address1 = request.GET.get('description', None)
         age1 = request.GET.get('length', None)
 
+        timer_in_secs = int(age1) * 60
         obj = Task2.objects.create(
             user = request.user,
             title = name1,
             description = address1,
             length = age1,
-            timer = age1
+            timer = timer_in_secs
         )
 
         task2 = {'id':obj.id,'title':obj.title,'description':obj.description,'length':obj.length}
@@ -42,12 +47,13 @@ class UpdateCrudUser(View):
         name1 = request.GET.get('name', None)
         address1 = request.GET.get('address', None)
         age1 = request.GET.get('age', None)
-
+        timer_in_secs = int(age1) * 60
+        
         obj = Task2.objects.get(id=id1)
         obj.title = name1
         obj.description = address1
         obj.length = age1
-        obj.timer = age1
+        obj.timer = timer_in_secs
         obj.save()
 
         task2 = {'id':obj.id,'title':obj.title,'description':obj.description,'length':obj.length}
@@ -79,19 +85,59 @@ class TimeCrudUser(View):
 class PauseCrudUser(View):
     def get(self,request):
         time_left1 = request.GET.get('time_left', None)
+
         id1 = request.GET.get('id',None)
+        try:
+            idx = time_left1.index(":")
+            timer1 = time_left1[:idx]
+            seconds1 = time_left1[idx+1:]
 
-        idx = time_left1.index(":")
+            obj = Task2.objects.get(id=id1)
+            obj.timer = (int(timer1) * 60) + int(seconds1)
+            obj.save()
 
-        timer1 = time_left1[:idx]
-        seconds1 = time_left1[idx+1:]
+            my_id = obj.id
+            data = {
+                'paused': True,
+                'id' : my_id
+            }
+            return JsonResponse(data)
+        except ValueError:
+            data = {
+                'paused': False,
+            }
+            return JsonResponse(data)
 
-        obj = Task2.objects.get(id=id1)
-        obj.timer = timer1
-        my_id = obj.id
-        obj.save()
+
+class CalcCrudUser(View):
+    def get(self,request):
+        mylist = Task2.objects.filter(user=self.request.user)
+        completed = 0
+        total = 0
+        for task in mylist:
+            completed += task.timer/60
+            total += float(task.length)
+
+        efficiency = 1 - (completed/total)
         data = {
-            'paused': True,
-            'id' : my_id
+            'efficiency':round(efficiency * 100,2),
         }
         return JsonResponse(data)
+
+
+class ResetAllTimersCrudUser(View):
+    def get(self,request):
+        mylist = Task2.objects.filter(user=self.request.user)
+        id_arr = []
+        for task in mylist:
+            task.timer = int(task.length) * 60
+            id_arr.append(task.id)
+            task.save()
+        data = {
+            'reset':True,
+            'id_arr':id_arr,
+        }
+        return JsonResponse(data)
+
+
+        #return all id's of all tasks -> make them all timer again -> stop all intervals
