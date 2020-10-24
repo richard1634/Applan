@@ -43,7 +43,9 @@ INSTALLED_APPS = [
     'task',
     'pages',
     'users',
+    'graphs',
     'svg',
+    'mathfilters',
 ]
 
 MIDDLEWARE = [
@@ -80,14 +82,23 @@ WSGI_APPLICATION = 'ajaxtut.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'wtspydlm',
+        'USER': 'wtspydlm',
+        'PASSWORD': 'BmPRGgLQFDloeyUTMNsZ0SvPV11bxwHg',
+        'HOST': 'lallah.db.elephantsql.com',
+        'PORT': '5432',
     }
 }
-
-
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
 
@@ -126,9 +137,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-
+STATIC_ROOT = '/home/richard1634/Applan/ajaxtut/static'
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
-STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR,'STATIC'),

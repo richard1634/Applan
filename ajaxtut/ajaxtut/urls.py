@@ -13,10 +13,12 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
+from django.contrib.auth.decorators import login_required
 from django.contrib import admin
 from django.urls import path
 from crud_ajax import  views 
-
+from graphs import views as views2
 
 from django.conf.urls import url
 #
@@ -27,7 +29,7 @@ from task.views import task_create_view,task_delete_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('task_manager/',  views.CrudView.as_view(), name='crud_ajax'),
+    path('task_manager/', login_required(views.CrudView.as_view()), name='crud_ajax'),
     path('ajax/crud/create/',  views.CreateCrudUser.as_view(), name='crud_ajax_create'),
     path('ajax/crud/update/',  views.UpdateCrudUser.as_view(), name='crud_ajax_update'),
     path('ajax/crud/delete/',  views.DeleteCrudUser.as_view(), name='crud_ajax_delete'),
@@ -35,6 +37,9 @@ urlpatterns = [
     path('ajax/crud/pause/',    views.PauseCrudUser.as_view(),  name='crud_ajax_pause'),
     path('ajax/crud/calc/',    views.CalcCrudUser.as_view(),  name='crud_ajax_calc'),
     path('ajax/crud/reset_timers/',    views.ResetAllTimersCrudUser.as_view(),  name='crud_ajax_reset'),
+
+
+    path('graphs/',    views2.GraphView.as_view(),  name='show_graph'),
 
     path('', home_view, name = 'home'),
     path('contact/',contact_view, name = 'contact'),

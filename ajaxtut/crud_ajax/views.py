@@ -6,6 +6,10 @@ from django.views.generic import ListView
 from .models import CrudUser, Task2
 from django.views.generic import View
 from django.http import JsonResponse
+from graphs.models import Graph
+from datetime import date
+
+
 
 class CrudView(ListView):
     model = Task2
@@ -119,16 +123,41 @@ class CalcCrudUser(View):
             total += float(task.length)
 
         efficiency = 1 - (completed/total)
+
+
+        
+        print(efficiency)
         data = {
             'efficiency':round(efficiency * 100,2),
         }
         return JsonResponse(data)
 
 
+
+#FOCUS ON THIS
 class ResetAllTimersCrudUser(View):
     def get(self,request):
         mylist = Task2.objects.filter(user=self.request.user)
+        graph = Graph.objects.get(user = self.request.user)
+
+        completed = 0
+        total = 0
+
         id_arr = []
+        today = date.today()
+        d2 = today.strftime("%B %d, %Y")
+        
+        # EFFICIENCY
+        for task in mylist:
+            completed += task.timer/60
+            total += float(task.length)
+        efficiency = (1 - (completed/total)) * 100
+        #
+
+        graph.days.append((d2,round(efficiency,2)))
+        graph.save()
+
+
         for task in mylist:
             task.timer = int(task.length) * 60
             id_arr.append(task.id)
@@ -139,5 +168,3 @@ class ResetAllTimersCrudUser(View):
         }
         return JsonResponse(data)
 
-
-        #return all id's of all tasks -> make them all timer again -> stop all intervals

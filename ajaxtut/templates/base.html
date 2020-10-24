@@ -18,17 +18,15 @@
 		{% include 'navbar.html' %}
 
 
-		<div class = "row">
-			<div class = "col-md-8">
+			<div align="center">
 				{% if messages %}
 					{% for message in messages %}
-						<div class = "alert alert-{{message.tags}}">
+						<div id="message2" class = "alert alert-{{message.tags}}">
 							{{ message }}
 						</div>
 					{% endfor %}
 				{% endif %}
 			</div>
-		</div>
 
 
 	  <main>
