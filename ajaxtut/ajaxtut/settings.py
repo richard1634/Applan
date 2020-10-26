@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'graphs',
     'svg',
     'mathfilters',
+    'chartjs',
 ]
 
 MIDDLEWARE = [

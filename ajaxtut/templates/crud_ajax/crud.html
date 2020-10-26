@@ -28,7 +28,7 @@
                   <button class="btn btn-outline-success form-control" type="submit">SUBMIT</button>
         </form>
         <div id="resetTimer">
-            <button class="btn btn-outline-secondary form-control" onClick="resetAllTimers()">Reset Timers</button>
+            <button id = "resetButton" class="btn btn-outline-secondary form-control" onClick="resetAllTimers()">Reset Timer/Save Progress</button>
         </div>
       </div>
 
@@ -50,7 +50,7 @@
               </span>
 
               <span id = "finishdiv2" align="center">
-                      0%
+                      -
               </span>
             </th>
 
@@ -399,7 +399,7 @@ function resetAllTimers()
     success: function (data) {
     if (data.reset) {
        console.log(data.reset)
-       setTimerString(data.id_arr)
+       setTimerString(data.id_arr,data.time_arr)
        $('#finishdiv2').html("0" +"%");
       }
     }
@@ -407,12 +407,14 @@ function resetAllTimers()
 }
 
 
-function setTimerString(id_arr)
+function setTimerString(id_arr,time_arr)
 {
    for (var i = 0; i<id_arr.length;i++)
     {
-      $('#timer-' + id_arr[i]).html("timer")
-       myTimedict[id_arr[i]] = null
+      clearInterval(myTimedict[id_arr[i]])
+      myTimedict[id_arr[i]] = null
+      var mins = Math.floor(time_arr[i]/60)
+      $('#timer-' + id_arr[i]).html(mins+":00")
     }
 }
 

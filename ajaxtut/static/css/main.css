@@ -31,19 +31,18 @@ h2{
 label{
 	font-family: "Montserrat", sans-serif;
 }
-body{
-	padding-bottom: 56px;
-	min-height: 100vh;
-	position: relative;  /*this for position absolute */
-	overflow-x:hidden;
+
+
+main{
+	width: 90vw;
+	margin: 0 auto;
+	min-height: calc(80.2vh);
 }
 .footer{
   padding-top:15px;
   padding-bottom: 15px;
 
   width: 100%;
-  position:absolute;
-  bottom: 0;
   background-color:#303030 ;
   color: white;
   display:flex;
@@ -121,5 +120,23 @@ body{
 	display: block;
     margin-left: auto;
     margin-right: auto;
+}
+
+#canvas-holder {
+        background-color: #FFFFFF;
+        width:80%;
+        height:20%;
+		
+    }
+canvas {
+  border: 1px solid;
+  padding: 0;
+  margin: auto;
+  display: block;
+  position: absolute;
+  top: 1;
+  bottom: 1;
+  left: 0;
+  right: 0;
 }
 

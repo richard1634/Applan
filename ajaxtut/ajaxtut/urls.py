@@ -39,7 +39,7 @@ urlpatterns = [
     path('ajax/crud/reset_timers/',    views.ResetAllTimersCrudUser.as_view(),  name='crud_ajax_reset'),
 
 
-    path('graphs/',    views2.GraphView.as_view(),  name='show_graph'),
+    path('graphs/',    views2.graph_view,  name='show_graph'),
 
     path('', home_view, name = 'home'),
     path('contact/',contact_view, name = 'contact'),

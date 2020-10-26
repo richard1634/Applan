@@ -144,6 +144,7 @@ class ResetAllTimersCrudUser(View):
         total = 0
 
         id_arr = []
+        time_arr = []
         today = date.today()
         d2 = today.strftime("%B %d, %Y")
         
@@ -161,10 +162,12 @@ class ResetAllTimersCrudUser(View):
         for task in mylist:
             task.timer = int(task.length) * 60
             id_arr.append(task.id)
+            time_arr.append(task.timer)
             task.save()
         data = {
             'reset':True,
             'id_arr':id_arr,
+            'time_arr': time_arr,
         }
         return JsonResponse(data)
 
