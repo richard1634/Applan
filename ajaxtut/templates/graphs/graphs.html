@@ -15,7 +15,7 @@ var myChart = new Chart(ctx, {
         datasets: [{
             label: '% Efficiency',
             data: [{% for item in my_efficiency %}'{{item}}',{% endfor %}],
-
+            backgroundColor: 'rgba(75, 192, 192, 0.2)',
             borderWidth: 1
         }]
     },
@@ -44,9 +44,23 @@ var myChart = new Chart(ctx, {
     <div align = "center">
         <h2>{{user.username}}'s Metrics <h2>
     </div>
+
+    <nav align ="center">
+        <ul class = "nav__links">
+            {% if my_date%}
+            {% else %}
+                <h1>No Data to display </h1>
+            {% endif %} 
+
+            <li><a href="{% url 'show_graph30' %}">30 Days</a></li>
+            <li><a href="{% url 'show_graph90' %}"> 90 Days </a></li>
+            <li><a href="{% url 'show_graphall' %}"> All Days</a></li>
+        </ul>
+    </nav>
 	<div id = "canvas-holder" align="center">
 		<canvas id="myChart" align="right"></canvas>
 	</div>
+
 </body>
 
 
