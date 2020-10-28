@@ -22,7 +22,7 @@ from graphs import views as views2
 
 from django.conf.urls import url
 #
-from pages.views import home_view, contact_view, about_view
+from pages.views import home_view, contact_view, about_view, tos_view
 from django.contrib.auth import views as auth_views
 from users.views import register_view, profile_view
 from task.views import task_create_view,task_delete_view
@@ -47,7 +47,7 @@ urlpatterns = [
     path('', home_view, name = 'home'),
     path('contact/',contact_view, name = 'contact'),
     path('about/', about_view, name = 'about'),
-
+    path('Terms_Of_Service/', tos_view, name = 'TOS'),
     path('register/', register_view, name = 'register'),
 
     path('login/', auth_views.LoginView.as_view(template_name='users/login.html'), name = 'login'),

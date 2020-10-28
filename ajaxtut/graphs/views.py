@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.shortcuts import render
-
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 # Views.py
 from django.views.generic import ListView
@@ -17,7 +17,7 @@ class GraphView(ListView):
     def get_queryset(self):
         return self.model.objects.filter(user=self.request.user)
 
-        
+@login_required        
 def graph_view(request,*args,**kwargs):
     graph = Graph.objects.get(user=request.user)
     #return HttpResponse("<h1> hello </h1>")
@@ -40,7 +40,7 @@ def graph_view(request,*args,**kwargs):
         "my_zip" : date_efficiency_zip
     }
     return render(request,'graphs/graphs.html', my_context)
-
+@login_required
 def graph_view7(request,*args,**kwargs):
     graph = Graph.objects.get(user=request.user)
     #return HttpResponse("<h1> hello </h1>")
@@ -69,7 +69,7 @@ def graph_view7(request,*args,**kwargs):
         "my_zip" : date_efficiency_zip
          }
     return render(request,'graphs/graphs.html', my_context)
-
+@login_required
 def graph_view30(request,*args,**kwargs):
     graph = Graph.objects.get(user=request.user)
     #return HttpResponse("<h1> hello </h1>")
@@ -99,7 +99,7 @@ def graph_view30(request,*args,**kwargs):
         "my_zip" : date_efficiency_zip
          }
     return render(request,'graphs/graphs.html', my_context)
-
+@login_required
 def graph_view90(request,*args,**kwargs):
     graph = Graph.objects.get(user=request.user)
     #return HttpResponse("<h1> hello </h1>")

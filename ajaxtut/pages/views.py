@@ -26,3 +26,5 @@ def about_view(request,*args,**kwargs):
 
 	return render(request,"about.html",my_context)
 
+def tos_view(request,*args,**kwargs):
+	return render(request,"TOS.html", {})
