@@ -13,18 +13,78 @@
 <!DOCTYPE html>
 <html>
 	<body>
+		<div class = "flex-container">
+			<div class = "home_content">
 
-		<div class = "home_content">
-			<div id="welcometext">
-				Welcome,
-			</div>
-			<div id="welcometext2">
-				Lets Get Planning.
-			</div>
+				 <section class="home">
+				     <div class="container">
+				        <div class="row">
+				            <div class="home-text" style="float: none; margin: 0 auto;">
 
-			<button onclick="location.href='{% url 'crud_ajax' %}';" class="btn btn-outline-success" id ="plan_button">Plan</button>
+				                 <p class="animate-text">
+				                    <span>Hello,		</span>
+				                    <span>Bonjour,		</span>
+				                    <span>Hola,			</span>
+				                    <span>Nǐn hǎo, 			</span>
+				                    <span>Konnichiwa,	</span>
+				                    <span>Guten Tag,	</span>
+				                    <span>Anyoung haseyo, </span>
+				                    <span>Namasté, </span>
+				                    <span>Privét,</span>
+				                    <span>Xin Chào, </span>
 
-			
+				                 </p>
+				            </div>
+				        </div>
+				     </div>
+				 </section>
+
+
+
+
+
+				<div id="welcometext2">
+					Lets Get Planning.
+				</div>
+
+				<button onclick="location.href='{% url 'crud_ajax' %}';" class="btn btn-outline-success" id ="plan_button">Plan</button>
+		</div>
+	<script>
+         const txts=document.querySelector(".animate-text").children,
+               txtsLen=txts.length;
+           let index=0;
+          const textInTimer=3000,
+                textOutTimer=2800;
+
+         function animateText() {
+            for(let i=0; i<txtsLen; i++){
+              txts[i].classList.remove("text-in","text-out");  
+            }
+            txts[index].classList.add("text-in");
+
+            setTimeout(function(){
+                txts[index].classList.add("text-out");              
+            },textOutTimer)
+
+            setTimeout(function(){
+
+              if(index == txtsLen-1){
+                  index=0;
+                }
+               else{
+                   index++;
+                 }
+                animateText();
+            },textInTimer); 
+         }
+         
+         window.onload=animateText;
+   
+</script>
+
+</body>
+</html>
+		
 		</body>
 
 
@@ -35,6 +95,10 @@
 	    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 	    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
-	</body>
+
 </html>
 	{% endblock %}
+
+
+
+

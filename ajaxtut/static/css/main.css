@@ -33,6 +33,10 @@ label{
 }
 
 
+
+ul {
+    list-style-type: none;
+}
 main{
 	width: 90vw;
 	margin: 0 auto;
@@ -138,4 +142,53 @@ canvas {
   left: 0;
   right: 0;
 }
+
+
+
+
+@media only screen and (max-width: 650px) {
+	.footer{
+	  padding-top:15px;
+	  padding-bottom: 15px;
+
+	  width: 100%;
+	  background-color:#303030 ;
+	  color: white;
+	  display:flex;
+	  justify-content: space-between;
+	  align-items: center;
+	  height: 10vh;
+	}
+
+	.footer_logo_a{
+		padding-left:3%;
+
+	}
+
+	.footer_country{
+		padding-right: 2%;
+		font-size:15px;
+		text-align: center;	
+	}
+	.footer_logo{
+	 	filter: brightness(0) invert(1);
+	}
+	.footer__links{
+		padding-left:20%;
+	}
+	.footer__links li{
+		display: inline-block;
+		padding: 0px 50px;
+		font-size:10px;
+		position:relative;
+		bottom:-7px;
+	}
+	.footer__links li a{
+		color:white;
+		text-decoration: none;
+		font-size:10px;
+	}
+}
+
+
 
